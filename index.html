@@ -80,6 +80,8 @@ input[type=range]{width:100%;accent-color:var(--teal)}
 .note{font-size:12.5px;color:var(--faint);margin:0}
 .proof{border:1px dashed var(--line-strong);padding:14px 16px;display:flex;flex-direction:column;gap:8px;background:var(--panel)}
 .proof .hash{font-family:var(--mono);font-size:12px;color:var(--cream);overflow-wrap:anywhere}
+.proof .steps{margin:4px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--dim)}
+.proof .steps::before{content:"In the real product";display:block;margin-left:-18px;font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal)}
 .proof .meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--dim);font-family:var(--mono)}
 .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--dim)}
@@ -150,7 +152,7 @@ footer.foot{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betwe
       <div class="pane" id="p-splits">
         <div class="group comp" id="g-comp"></div>
         <div class="group" id="g-master"></div>
-        <button class="btn" id="register">Sign &amp; register split sheet</button>
+        <button class="btn" id="register">Simulate signing the split sheet</button>
         <div id="proofs" class="group"></div>
         <p class="note" style="color:var(--cream)">Names and roles are the real credits. The percentages are examples, because this song's actual split isn't public. Drag them to try other splits.</p>
         <p class="note">Every contributor signs the same split sheet. The fingerprint below is a real SHA-256 of that sheet, so any change produces a new one. In this demo nothing is sent to a blockchain.</p>
@@ -367,7 +369,7 @@ function showDetail(){
       <p class="sub"><span class="pill c-${h.right}">${label}</span></p>
       <dl class="kv"><dt>Example share</dt><dd>${h.share}% of the ${h.right === "comp" ? "composition" : "master"}</dd>
       <dt>Estimated earnings</dt><dd>${fmt(m.pay[h.id])}</dd><dt>Payout wallet</dt><dd>${h.wallet}</dd>
-      <dt>Signed</dt><dd>${latest ? "split sheet v" + latest.v : "waiting for signature"}</dd></dl>${extra}`;
+      <dt>Signed</dt><dd>${latest ? "simulated, split sheet v" + latest.v : "not yet (needs their wallet signature)"}</dd></dl>${extra}`;
     return;
   }
   const s = sources.find(x => x.id === selected);
@@ -411,16 +413,41 @@ function drawSplits(){
 function checkSums(){
   const ok = ["comp", "master"].every(r => holders.filter(h => h.right === r).reduce((s, h) => s + h.share, 0) === 100);
   const b = $("#register"); b.disabled = !ok;
-  b.textContent = ok ? (sheets.length ? "Sign & register v" + (sheets.length + 1) : "Sign & register split sheet") : "Each side must add up to 100%";
+  b.textContent = ok ? (sheets.length ? "Simulate signing v" + (sheets.length + 1) : "Simulate signing the split sheet") : "Each side must add up to 100%";
 }
 async function sha(text){
   try {
     const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
     return "0x" + [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
   } catch (e) {
-    let h = 0; for (const ch of text) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-    return "0x" + h.toString(16).padStart(8, "0").repeat(8);
+    return "0x" + sha256(new TextEncoder().encode(text));
   }
+}
+// Plain SHA-256 for pages opened without crypto.subtle (e.g. a local file).
+function sha256(bytes){
+  const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const len = bytes.length, total = ((len + 9 + 63) >> 6) << 6, m = new Uint8Array(total);
+  m.set(bytes); m[len] = 0x80;
+  const bits = len * 8, dv = new DataView(m.buffer);
+  dv.setUint32(total - 8, Math.floor(bits / 0x100000000)); dv.setUint32(total - 4, bits >>> 0);
+  const w = new Uint32Array(64), rot = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let o = 0; o < total; o += 64) {
+    for (let i = 0; i < 16; i++) w[i] = dv.getUint32(o + i * 4);
+    for (let i = 16; i < 64; i++) {
+      const s0 = rot(w[i-15], 7) ^ rot(w[i-15], 18) ^ (w[i-15] >>> 3), s1 = rot(w[i-2], 17) ^ rot(w[i-2], 19) ^ (w[i-2] >>> 10);
+      w[i] = (w[i-16] + s0 + w[i-7] + s1) >>> 0;
+    }
+    let [a, b, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const t1 = (h + (rot(e, 6) ^ rot(e, 11) ^ rot(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) >>> 0;
+      const t2 = ((rot(a, 2) ^ rot(a, 13) ^ rot(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
+      h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    H[0] = (H[0] + a) >>> 0; H[1] = (H[1] + b) >>> 0; H[2] = (H[2] + c) >>> 0; H[3] = (H[3] + d) >>> 0;
+    H[4] = (H[4] + e) >>> 0; H[5] = (H[5] + f) >>> 0; H[6] = (H[6] + g) >>> 0; H[7] = (H[7] + h) >>> 0;
+  }
+  return H.map(x => x.toString(16).padStart(8, "0")).join("");
 }
 $("#register").addEventListener("click", async () => {
   const sheet = {track:track.title, label:track.label, version:sheets.length + 1,
@@ -434,10 +461,11 @@ $("#register").addEventListener("click", async () => {
 });
 function drawProofs(){
   $("#proofs").innerHTML = sheets.slice().reverse().map((s, i) => `<div class="proof">
-    <div class="eyebrow" style="color:${i === 0 ? "var(--good)" : "var(--faint)"}">${i === 0 ? "Current split sheet" : "Replaced"} · v${s.v}</div>
+    <div class="eyebrow" style="color:${i === 0 ? "var(--good)" : "var(--faint)"}">${i === 0 ? "Simulated split sheet" : "Replaced"} · v${s.v}</div>
     <div class="hash">${s.hash}</div>
-    <div class="meta"><span>${holders.length}/${holders.length} signatures</span><span>${new Date(s.at).toLocaleString("en-GB", {dateStyle:"medium", timeStyle:"short"})}</span></div>
-    <div class="meta" style="font-family:var(--sans)">${s.snapshot}</div></div>`).join("");
+    <div class="meta"><span>0/${holders.length} real signatures (demo)</span><span>${new Date(s.at).toLocaleString("en-GB", {dateStyle:"medium", timeStyle:"short"})}</span></div>
+    <div class="meta" style="font-family:var(--sans)">${s.snapshot}</div>
+    ${i === 0 ? `<ol class="steps"><li>Each of the ${holders.length} people approves this exact sheet with their own wallet signature.</li><li>Once all ${holders.length} have signed, the fingerprint and signatures are written to the blockchain, so nobody can quietly change them.</li><li>A payment contract then splits every payment to the song by these percentages, straight to each wallet.</li></ol>` : ""}</div>`).join("");
 }
 
 /* ---------- earnings ---------- */
