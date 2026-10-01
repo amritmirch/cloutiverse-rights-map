@@ -33,6 +33,12 @@ header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justif
 .brand .kicker b{color:var(--teal);font-weight:500}
 .brand h1{margin:0;font-size:clamp(26px,4vw,40px);font-weight:600;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
 .brand span{color:var(--dim)}
+.earn-hero{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.earn-hero .eyebrow{color:var(--cream)}
+.earn-hero b{font-family:var(--mono);font-size:clamp(24px,3.4vw,34px);font-weight:500;color:var(--teal);font-variant-numeric:tabular-nums;line-height:1.1}
+.earn-hero small{color:var(--faint);font-size:12px}
+.earn-hero button{background:none;border:0;padding:0;color:var(--dim);font:500 12.5px var(--sans);text-decoration:underline;cursor:pointer}
+@media (max-width:700px){.earn-hero{align-items:flex-start;text-align:left}}
 .tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);padding:5px 9px;border-radius:999px}
 .main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
 .stage{border-right:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -118,7 +124,7 @@ footer.foot{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-betwe
 <div class="wrap">
   <header class="top">
     <div class="brand"><div class="kicker"><b>Cloutiverse</b> · rights map concept</div><h1>Stephanie Siriwardhana</h1><span>Her song <i>Ipadune Dinanna</i>, mapped as music IP: who made it, who owns it, where the money goes.</span></div>
-    <span class="tag">Prototype · real credits, example shares</span>
+    <div class="earn-hero"><span class="eyebrow">Stephanie's estimated earnings</span><b id="hero-earn">LKR 0</b><small id="hero-note">example 10% share of the recording</small><button type="button" id="hero-go">See how it's calculated</button></div>
   </header>
 
   <div class="main">
@@ -225,7 +231,7 @@ const derivs = [
    note:"Fans re-upload the song with lyrics. Today none of that reaches the writers or singers."},
 ];
 let sheets = [];
-let selected = "track";
+let selected = "ss";
 let licN = 1;
 
 const $ = s => document.querySelector(s);
@@ -441,6 +447,9 @@ function drawPay(){
     [...holders].sort((a, b) => (b.star ? 1 : 0) - (a.star ? 1 : 0)).map(h => `<tr><td>${h.name} <span style="color:var(--faint);font-size:12px">${h.role}</span><div class="bar"><span style="width:${(m.pay[h.id] / max * 100).toFixed(1)}%;background:${COL[h.right]}"></span></div></td>
       <td class="n c-${h.right}">${h.share}%</td><td class="n">${fmt(m.pay[h.id])}</td></tr>`).join("") + `</tbody>`;
   $("#total").textContent = fmt(m.total);
+  const st = holders.find(h => h.star);
+  $("#hero-earn").textContent = fmt(m.pay[st.id]);
+  $("#hero-note").textContent = "example " + st.share + "% share of the recording · " + track.ytViews.toLocaleString("en-US") + " real YouTube views";
 }
 ["#in-streams", "#in-yt", "#in-tv"].forEach(s => $(s).addEventListener("input", () => { drawPay(); showDetail(); }));
 $("#run").addEventListener("click", runMoney);
@@ -490,6 +499,7 @@ document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("cl
   ["splits", "earn", "lic"].forEach(t => $("#p-" + t).hidden = t !== b.dataset.tab);
 }));
 
+$("#hero-go").addEventListener("click", () => { document.querySelector("#t-earn").click(); document.querySelector("nav.tabs").scrollIntoView({behavior:"smooth", block:"start"}); });
 render(); drawSplits(); drawPay(); drawLics(); showDetail();
 setTimeout(runMoney, 600);
 })();
