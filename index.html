@@ -205,11 +205,11 @@ const holders = [
   {id:"rw", name:"Randeer Witana", role:"Lyrics, rap", right:"comp", share:25, a:246},
   {id:"k2", name:"Kavishka Dombawala", role:"Music (K2)", right:"comp", share:25, a:294},
   {id:"lpc", name:"Lahiru Perera", role:"Music", right:"comp", share:25, a:328},
-  {id:"lpv", name:"Lahiru Perera", role:"Vocals", right:"master", share:10, a:22},
+  {id:"ss", name:"Stephanie Siriwardhana", role:"Vocals", right:"master", share:10, a:22, star:true},
+  {id:"lpv", name:"Lahiru Perera", role:"Vocals", right:"master", share:10, a:134},
   {id:"aw", name:"Abhisheka Wimalaweera", role:"Vocals", right:"master", share:10, a:50},
   {id:"sd", name:"Sanka Dineth", role:"Vocals", right:"master", share:10, a:78},
   {id:"rc", name:"Raini Charuka", role:"Vocals", right:"master", share:10, a:106},
-  {id:"ss", name:"Stephanie Siriwardhana", role:"Vocals", right:"master", share:10, a:134, star:true},
   {id:"lbl", name:"Maharaja Entertainments", role:"Label", right:"master", share:50, a:170},
 ];
 holders.forEach(h => h.wallet = "not connected (demo)");
@@ -438,7 +438,7 @@ function drawProofs(){
 function drawPay(){
   const m = money(), max = Math.max(...Object.values(m.pay), 1);
   $("#pay").innerHTML = `<thead><tr><th>Holder</th><th class="n">Share</th><th class="n">Earns</th></tr></thead><tbody>` +
-    holders.map(h => `<tr><td>${h.name} <span style="color:var(--faint);font-size:12px">${h.role}</span><div class="bar"><span style="width:${(m.pay[h.id] / max * 100).toFixed(1)}%;background:${COL[h.right]}"></span></div></td>
+    [...holders].sort((a, b) => (b.star ? 1 : 0) - (a.star ? 1 : 0)).map(h => `<tr><td>${h.name} <span style="color:var(--faint);font-size:12px">${h.role}</span><div class="bar"><span style="width:${(m.pay[h.id] / max * 100).toFixed(1)}%;background:${COL[h.right]}"></span></div></td>
       <td class="n c-${h.right}">${h.share}%</td><td class="n">${fmt(m.pay[h.id])}</td></tr>`).join("") + `</tbody>`;
   $("#total").textContent = fmt(m.total);
 }
