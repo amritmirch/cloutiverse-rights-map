@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Concept prototype for Cloutiverse: Stephanie Siriwardhana's song Ipadune Dinanna mapped as music IP.">
+<meta property="og:title" content="Stephanie Siriwardhana · Cloutiverse Rights Map">
+<meta property="og:description" content="Ipadune Dinanna mapped as music IP: who made it, who owns it, where the money goes.">
+<title>Cloutiverse Rights Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Sinhala:wght@400;600&display=swap">
+<style>
+/* Layout: a record you can read. The song's rights network is drawn on the grooves (left), the controls sit in a dashed-ruled side panel (right), stacking on phones. Single dark look, matching the Cloutiverse site. */
+:root{
+  --ink:#0c0a09; --panel:#13100f; --raise:#1a1615; --line:rgba(231,229,228,.11); --line-strong:rgba(231,229,228,.22);
+  --fg:#e7e5e4; --dim:#a29a95; --faint:#6f6763;
+  --teal:#5cc8be; --coral:#f0715f; --cream:#f3e3c7; --good:#7fd48a; --warn:#f2b45a;
+  --sans:"Hanken Grotesk",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+html,body{background:var(--ink);color:var(--fg)}
+body{font-family:var(--sans);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:1240px;margin:0 auto;border:1px dashed var(--line-strong);border-radius:2px}
+header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;padding:22px 26px;border-bottom:1px solid var(--line)}
+.brand{display:flex;flex-direction:column;gap:4px;min-width:0}
+.brand .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+.brand .kicker b{color:var(--teal);font-weight:500}
+.brand h1{margin:0;font-size:clamp(26px,4vw,40px);font-weight:600;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
+.brand span{color:var(--dim)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line);padding:5px 9px;border-radius:999px}
+.main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+.stage{border-right:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.stage svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12.5px;color:var(--dim);padding:0 8px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.hint{font-size:12.5px;color:var(--faint);padding:0 8px}
+.side{display:flex;flex-direction:column;min-width:0}
+.card{padding:22px 26px;border-bottom:1px solid var(--line);min-height:236px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint)}
+.card h2{margin:6px 0 2px;font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.15;text-wrap:balance}
+.card .sub{color:var(--dim);margin:0 0 14px}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0;font-size:13.5px}
+dl.kv dt{color:var(--faint)}
+dl.kv dd{margin:0;font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.c-comp{color:var(--coral)} .c-master{color:var(--teal)} .c-src{color:var(--cream)} .c-der{color:#c9a7f0}
+nav.tabs{display:flex;border-bottom:1px solid var(--line)}
+nav.tabs button{flex:1;background:none;border:0;border-right:1px solid var(--line);color:var(--dim);font:500 14px var(--sans);padding:14px 8px;cursor:pointer}
+nav.tabs button:last-child{border-right:0}
+nav.tabs button[aria-selected="true"]{color:var(--fg);background:var(--raise);box-shadow:inset 0 -2px 0 var(--teal)}
+nav.tabs button:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.pane{padding:20px 26px 26px;display:flex;flex-direction:column;gap:16px}
+.group{display:flex;flex-direction:column;gap:10px}
+.group-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.group-head h3{margin:0;font-size:14px;font-weight:600}
+.sum{font-family:var(--mono);font-size:12px}
+.sum.ok{color:var(--good)} .sum.bad{color:var(--warn)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 120px 46px;gap:12px;align-items:center;font-size:13.5px}
+.row .who{min-width:0}
+.row .who b{font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .who small{color:var(--faint);font-size:12px}
+.row output{font-family:var(--mono);font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.comp input[type=range]{accent-color:var(--coral)}
+.btn{background:var(--fg);color:var(--ink);border:0;border-radius:999px;font:600 14px var(--sans);padding:11px 18px;cursor:pointer;align-self:flex-start;display:inline-flex;gap:8px;align-items:center}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.ghost{background:none;color:var(--fg);border:1px solid var(--line-strong)}
+.note{font-size:12.5px;color:var(--faint);margin:0}
+.proof{border:1px dashed var(--line-strong);padding:14px 16px;display:flex;flex-direction:column;gap:8px;background:var(--panel)}
+.proof .hash{font-family:var(--mono);font-size:12px;color:var(--cream);overflow-wrap:anywhere}
+.proof .meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--dim);font-family:var(--mono)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--dim)}
+label.f input,label.f select{background:var(--panel);color:var(--fg);border:1px solid var(--line-strong);border-radius:2px;padding:9px 10px;font:500 14px var(--mono);width:100%;min-width:0}
+table.pay{width:100%;border-collapse:collapse;font-size:13px}
+table.pay th{font-weight:500;color:var(--faint);text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:6px 0;border-bottom:1px solid var(--line)}
+table.pay td{padding:8px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+table.pay td.n,table.pay th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.bar{height:4px;background:var(--line);border-radius:2px;margin-top:5px;overflow:hidden}
+.bar span{display:block;height:100%}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-family:var(--mono);font-size:13px;color:var(--dim)}
+.total b{color:var(--fg);font-size:18px;font-weight:500}
+.lic-list{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.lic{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.lic small{color:var(--faint);grid-column:1/-1;font-family:var(--mono);font-size:11.5px}
+footer.foot{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;padding:16px 26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--faint)}
+/* svg */
+.groove{fill:none;stroke:rgba(231,229,228,.035)}
+.spin{transform-origin:360px 320px;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.edge{fill:none;stroke-width:1.6;opacity:.55;transition:opacity .2s}
+.edge.dim{opacity:.12}
+.node{cursor:pointer}
+.node circle.dot{stroke:var(--ink);stroke-width:3;transition:r .35s ease}
+.node:hover circle.dot,.node.sel circle.dot{stroke:var(--fg);stroke-width:2}
+.node text{font-family:var(--sans);fill:var(--fg);font-size:13px;font-weight:500;pointer-events:none}
+.node text.role{fill:var(--dim);font-size:11px;font-weight:400}
+.node text.pct{font-family:var(--mono);font-size:10.5px;fill:var(--ink);font-weight:500}
+.node:focus{outline:none}
+.node:focus-visible circle.dot{stroke:var(--teal);stroke-width:3}
+.pop{animation:pop .5s ease-out}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+.arc-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;fill:var(--faint)}
+@media (max-width:900px){.main{grid-template-columns:minmax(0,1fr)}.stage{border-right:0;border-bottom:1px solid var(--line)}}
+@media (max-width:520px){header.top,.card,.pane,footer.foot{padding-inline:16px}.row{grid-template-columns:minmax(0,1fr) 90px 40px}.card h2{font-size:23px}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}.pop{animation:none}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="kicker"><b>Cloutiverse</b> · rights map concept</div><h1>Stephanie Siriwardhana</h1><span>Her song <i>Ipadune Dinanna</i>, mapped as music IP: who made it, who owns it, where the money goes.</span></div>
+    <span class="tag">Prototype · real credits, example shares</span>
+  </header>
+
+  <div class="main">
+    <section class="stage" aria-label="Rights map">
+      <svg id="map" viewBox="0 0 720 640" role="img" aria-label="Rights network for Ipadune Dinanna, the Voice Teens Sri Lanka season 2 theme song, drawn on a vinyl record"></svg>
+      <div class="legend">
+        <span><i style="background:var(--coral)"></i>Composition (song, lyrics)</span>
+        <span><i style="background:var(--teal)"></i>Master (the recording)</span>
+        <span><i style="background:var(--cream)"></i>Income source</span>
+        <span><i style="background:#c9a7f0"></i>Licensed new work</span>
+      </div>
+      <p class="hint">Tap any dot on the record to see who owns what. Dot size follows each person's share. The dashed ring marks Stephanie.</p>
+    </section>
+
+    <aside class="side">
+      <div class="card" id="detail" aria-live="polite"></div>
+      <nav class="tabs" role="tablist">
+        <button role="tab" id="t-splits" aria-selected="true" data-tab="splits">Splits</button>
+        <button role="tab" id="t-earn" aria-selected="false" data-tab="earn">Earnings</button>
+        <button role="tab" id="t-lic" aria-selected="false" data-tab="lic">License</button>
+      </nav>
+
+      <div class="pane" id="p-splits">
+        <div class="group comp" id="g-comp"></div>
+        <div class="group" id="g-master"></div>
+        <button class="btn" id="register">Sign &amp; register split sheet</button>
+        <div id="proofs" class="group"></div>
+        <p class="note" style="color:var(--cream)">Names and roles are the real credits. The percentages are examples, because this song's actual split isn't public. Drag them to try other splits.</p>
+        <p class="note">Every contributor signs the same split sheet. The fingerprint below is a real SHA-256 of that sheet, so any change produces a new one. In this demo nothing is sent to a blockchain.</p>
+      </div>
+
+      <div class="pane" id="p-earn" hidden>
+        <div class="fields">
+          <label class="f" for="in-yt">YouTube views (real)<input id="in-yt" type="number" min="0" step="10000" value="520275"></label>
+          <label class="f" for="in-streams">Streams (example)<input id="in-streams" type="number" min="0" step="10000" value="150000"></label>
+          <label class="f" for="in-tv">TV theme fee, LKR (example)<input id="in-tv" type="number" min="0" step="10000" value="300000"></label>
+        </div>
+        <button class="btn" id="run">▶ Run the money</button>
+        <table class="pay" id="pay"></table>
+        <div class="total"><span>Total paid out</span><b id="total"></b></div>
+        <p class="note">YouTube views are the real count on Sirasa TV's official video as of 1 Oct 2026. Streams and the TV fee are examples, since those numbers aren't public. Assumes about US$0.003 per stream and US$0.0008 per view at LKR 300 per dollar. Streaming and YouTube income goes 80% to the master and 20% to the composition. TV fees and licensed-work royalties split 50/50.</p>
+      </div>
+
+      <div class="pane" id="p-lic" hidden>
+        <p class="note" style="color:var(--dim);font-size:13.5px">Grant a license for a new work built on this track. The new work joins the map and pays a royalty back to every rights holder on the original, automatically.</p>
+        <div class="fields">
+          <label class="f" for="lic-type">Use<select id="lic-type">
+            <option value="Remix">Remix</option>
+            <option value="Sample">Sample in a new song</option>
+            <option value="Cover">Cover version</option>
+            <option value="Ad sync">Ad or film sync</option>
+          </select></label>
+          <label class="f" for="lic-who">Licensee<input id="lic-who" type="text" value="Tamil version team" maxlength="40"></label>
+          <label class="f" for="lic-rev">Expected revenue (LKR)<input id="lic-rev" type="number" min="0" step="10000" value="400000"></label>
+          <label class="f" for="lic-pct">Royalty back to original (%)<input id="lic-pct" type="number" min="1" max="90" value="20"></label>
+        </div>
+        <button class="btn" id="grant">Grant license</button>
+        <div class="lic-list" id="lics"></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="foot">
+    <span>Concept prototype made for the Cloutiverse team. Not an official Cloutiverse product.</span>
+    <span>Credits and YouTube figures: official Sirasa TV video, Apple Music, JioSaavn. Shares, streams and fees are examples.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+const NS = "http://www.w3.org/2000/svg";
+const CX = 360, CY = 320, R_IN = 140, R_OUT = 248;
+const LKR_PER_USD = 300;
+const COL = {comp:"var(--coral)", master:"var(--teal)", src:"var(--cream)", der:"#c9a7f0"};
+const HEX = {comp:"#f0715f", master:"#5cc8be", src:"#f3e3c7", der:"#c9a7f0"};
+
+const track = {title:"Ipadune Dinanna", si:"ඉපදුනේ දිනන්න", en:"Born to Win", genre:"Theme song, The Voice Teens Sri Lanka S2", length:"3:38",
+  video:"29 Jan 2022 on Sirasa TV", single:"18 Mar 2022", label:"Maharaja Entertainments", ytViews:520275, ytLikes:11074, asOf:"1 Oct 2026",
+  url:"https://www.youtube.com/watch?v=tfIzNkLdhvA"};
+
+/* Credits are real (official music video description, Sirasa TV). Shares are EXAMPLES: the real split for this song is not public. */
+const holders = [
+  {id:"mw", name:"Manuranga Wijesekara", role:"Lyrics, rap", right:"comp", share:25, a:212},
+  {id:"rw", name:"Randeer Witana", role:"Lyrics, rap", right:"comp", share:25, a:246},
+  {id:"k2", name:"Kavishka Dombawala", role:"Music (K2)", right:"comp", share:25, a:294},
+  {id:"lpc", name:"Lahiru Perera", role:"Music", right:"comp", share:25, a:328},
+  {id:"lpv", name:"Lahiru Perera", role:"Vocals", right:"master", share:10, a:22},
+  {id:"aw", name:"Abhisheka Wimalaweera", role:"Vocals", right:"master", share:10, a:50},
+  {id:"sd", name:"Sanka Dineth", role:"Vocals", right:"master", share:10, a:78},
+  {id:"rc", name:"Raini Charuka", role:"Vocals", right:"master", share:10, a:106},
+  {id:"ss", name:"Stephanie Siriwardhana", role:"Vocals", right:"master", share:10, a:134, star:true},
+  {id:"lbl", name:"Maharaja Entertainments", role:"Label", right:"master", share:50, a:170},
+];
+holders.forEach(h => h.wallet = "not connected (demo)");
+const sources = [
+  {id:"str", name:"Streaming", role:"Apple Music, JioSaavn", kind:"src", a:322},
+  {id:"yt", name:"YouTube", role:"520,275 views", kind:"src", a:0},
+  {id:"tv", name:"TV broadcast", role:"Sirasa TV theme", kind:"src", a:38},
+];
+const derivs = [
+  {id:"d1", name:"Grand Finale", role:"Contestants' performance", kind:"der", type:"Live performance", who:"The Voice Teens S2 finalists", rev:0, pct:0, a:180,
+   note:"Performed on the Grand Finale broadcast. Its promo clip alone has 214,269 views."},
+  {id:"d2", name:"Fan lyric edits", role:"Unlicensed, pays 0%", kind:"der", type:"Fan upload", who:"Fan channels on YouTube", rev:0, pct:0, a:180,
+   note:"Fans re-upload the song with lyrics. Today none of that reaches the writers or singers."},
+];
+let sheets = [];
+let selected = "track";
+let licN = 1;
+
+const $ = s => document.querySelector(s);
+const fmt = n => "LKR " + Math.round(n).toLocaleString("en-US");
+const pol = (a, r) => { const t = (a - 90) * Math.PI / 180; return [CX + r * Math.cos(t), CY + r * Math.sin(t)]; };
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+
+function layoutDerivs(){
+  const n = derivs.length, step = Math.min(34, 120 / Math.max(1, n));
+  derivs.forEach((d, i) => d.a = 180 + (i - (n - 1) / 2) * step);
+}
+
+/* ---------- money model ---------- */
+function money(){
+  const streams = +$("#in-streams").value || 0, yt = +$("#in-yt").value || 0, sync = +$("#in-tv").value || 0;
+  const dsp = (streams * 0.003 + yt * 0.0008) * LKR_PER_USD;
+  const derivIn = derivs.reduce((s, d) => s + d.rev * d.pct / 100, 0);
+  const pools = {
+    master: dsp * 0.8 + sync * 0.5 + derivIn * 0.5,
+    comp: dsp * 0.2 + sync * 0.5 + derivIn * 0.5,
+  };
+  const pay = {};
+  holders.forEach(h => pay[h.id] = pools[h.right] * h.share / 100);
+  return {streams, yt, sync, dsp, derivIn, pools, pay, total: pools.master + pools.comp};
+}
+
+/* ---------- svg map ---------- */
+const svg = $("#map");
+function drawRecord(){
+  const defs = el("defs", {}, svg);
+  const g1 = el("radialGradient", {id:"vin", cx:"50%", cy:"50%", r:"50%"}, defs);
+  el("stop", {offset:"0%", "stop-color":"#1c1817"}, g1); el("stop", {offset:"100%", "stop-color":"#0f0d0c"}, g1);
+  const g2 = el("linearGradient", {id:"sheen", x1:"0", y1:"0", x2:"1", y2:"1"}, defs);
+  el("stop", {offset:"0", "stop-color":"#fff", "stop-opacity":"0"}, g2);
+  el("stop", {offset:".5", "stop-color":"#fff", "stop-opacity":".05"}, g2);
+  el("stop", {offset:"1", "stop-color":"#fff", "stop-opacity":"0"}, g2);
+  el("circle", {cx:CX, cy:CY, r:296, fill:"url(#vin)"}, svg);
+  const spin = el("g", {class:"spin"}, svg);
+  for (let r = 74; r <= 292; r += 4) el("circle", {cx:CX, cy:CY, r, class:"groove"}, spin);
+  el("path", {d:`M${CX} ${CY} L${CX-60} ${CY-292} A292 292 0 0 1 ${CX+60} ${CY-292} Z`, fill:"url(#sheen)"}, spin);
+  el("path", {d:`M${CX} ${CY} L${CX+60} ${CY+292} A292 292 0 0 1 ${CX-60} ${CY+292} Z`, fill:"url(#sheen)"}, spin);
+  // arc labels
+  const p1 = el("path", {id:"arcL", d:`M ${pol(200,190)} A190 190 0 0 1 ${pol(340,190)}`, fill:"none"}, defs);
+  const p2 = el("path", {id:"arcR", d:`M ${pol(20,190)} A190 190 0 0 1 ${pol(160,190)}`, fill:"none"}, defs);
+  const t1 = el("text", {class:"arc-label"}, svg); const tp1 = el("textPath", {href:"#arcL", startOffset:"50%", "text-anchor":"middle"}, t1); tp1.textContent = "COMPOSITION";
+  const t2 = el("text", {class:"arc-label"}, svg); const tp2 = el("textPath", {href:"#arcR", startOffset:"50%", "text-anchor":"middle"}, t2); tp2.textContent = "MASTER RECORDING";
+}
+drawRecord();
+const gEdges = el("g", {}, svg), gNodes = el("g", {}, svg), gPulse = el("g", {}, svg);
+const paths = {};
+
+function curve(x1, y1, x2, y2, bend){
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1;
+  return `M${x1.toFixed(1)} ${y1.toFixed(1)} Q${(mx - dy * bend).toFixed(1)} ${(my + dx * bend).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+}
+
+function nodeRadius(h){ return 12 + h.share * 0.32; }
+
+function render(newId){
+  layoutDerivs();
+  gEdges.innerHTML = ""; gNodes.innerHTML = "";
+  // holders: centre -> holder
+  holders.forEach(h => {
+    const [x, y] = pol(h.a, R_IN);
+    paths[h.id] = el("path", {d:curve(CX, CY, x, y, .12), class:"edge", stroke:COL[h.right], "data-id":h.id}, gEdges);
+  });
+  [...sources, ...derivs].forEach(s => {
+    const [x, y] = pol(s.a, R_OUT);
+    paths[s.id] = el("path", {d:curve(x, y, CX, CY, -.08), class:"edge", stroke:COL[s.kind], "stroke-dasharray":s.kind === "der" ? "2 5" : "6 6", "data-id":s.id}, gEdges);
+  });
+
+  // centre label
+  const c = el("g", {class:"node" + (selected === "track" ? " sel" : ""), tabindex:"0", role:"button", "aria-label":"Track details"}, gNodes);
+  el("circle", {cx:CX, cy:CY, r:64, fill:"#161211", class:"dot"}, c);
+  el("circle", {cx:CX, cy:CY, r:64, fill:"none", stroke:"var(--teal)", "stroke-opacity":".35", "stroke-width":"1"}, c);
+  const ts = el("text", {x:CX, y:CY - 16, "text-anchor":"middle", class:"role", style:"font-family:'Noto Sans Sinhala',var(--sans);font-size:12px"}, c); ts.textContent = track.si;
+  const tt = el("text", {x:CX, y:CY + 3, "text-anchor":"middle", style:"font-size:15px;font-weight:600"}, c); tt.textContent = track.title;
+  const te = el("text", {x:CX, y:CY + 19, "text-anchor":"middle", class:"role"}, c); te.textContent = track.en + " · " + track.length;
+  el("circle", {cx:CX, cy:CY + 36, r:3, fill:"var(--ink)"}, c);
+  bind(c, "track");
+
+  holders.forEach(h => drawNode(h, R_IN, COL[h.right], nodeRadius(h), h.share + "%"));
+  sources.forEach(s => drawNode(s, R_OUT, COL.src, 13, null));
+  derivs.forEach(d => drawNode(d, R_OUT, COL.der, 13, null, d.id === newId));
+  highlight();
+}
+
+function drawNode(n, r, color, rad, pct, isNew){
+  const [x, y] = pol(n.a, r);
+  const g = el("g", {class:"node" + (selected === n.id ? " sel" : ""), tabindex:"0", role:"button", "aria-label":n.name + ", " + n.role}, gNodes);
+  const inner = el("g", isNew ? {class:"pop", style:`transform-origin:${x}px ${y}px`} : {}, g);
+  if (n.star) el("circle", {cx:x, cy:y, r:rad + 6, fill:"none", stroke:"var(--cream)", "stroke-width":"1.5", "stroke-dasharray":"3 3"}, inner);
+  el("circle", {cx:x, cy:y, r:rad, fill:color, class:"dot"}, inner);
+  if (pct) { const p = el("text", {x, y:y + 3.6, "text-anchor":"middle", class:"pct"}, inner); p.textContent = pct; }
+  // labels sit beside nodes on the left and right flanks, below them at the top and bottom
+  const sin = Math.sin(n.a * Math.PI / 180), side = Math.abs(sin) > .3;
+  const gap = rad + (n.star ? 14 : 8);
+  const lx = side ? x + Math.sign(sin) * gap : x, anchor = side ? (sin > 0 ? "start" : "end") : "middle";
+  const ly = side ? y - 2 : y + rad + 15;
+  const t = el("text", {x:lx, y:ly, "text-anchor":anchor}, inner); t.textContent = n.name;
+  const s = el("text", {x:lx, y:ly + 14, "text-anchor":anchor, class:"role"}, inner); s.textContent = n.role;
+  bind(g, n.id);
+}
+
+function bind(g, id){
+  g.addEventListener("click", () => select(id));
+  g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(id); } });
+}
+function select(id){ selected = id; render(); showDetail(); }
+function highlight(){
+  gEdges.querySelectorAll(".edge").forEach(p => p.classList.toggle("dim", selected !== "track" && p.dataset.id !== selected));
+}
+
+/* ---------- detail card ---------- */
+function showDetail(){
+  const d = $("#detail"), m = money();
+  const latest = sheets[sheets.length - 1];
+  if (selected === "track") {
+    d.innerHTML = `<div class="eyebrow">Real track · credits from the official video</div>
+      <h2>${track.title} <span style="color:var(--dim);font-weight:400;font-family:'Noto Sans Sinhala',var(--sans);font-size:.7em">${track.si}</span></h2>
+      <p class="sub">${track.genre} · ${track.length}</p>
+      <dl class="kv"><dt>Music video</dt><dd>${track.video}</dd><dt>Single</dt><dd>${track.single} · ${track.label}</dd>
+      <dt>YouTube</dt><dd><a href="${track.url}" target="_blank" rel="noopener" style="color:var(--teal)">${track.ytViews.toLocaleString("en-US")} views · ${track.ytLikes.toLocaleString("en-US")} likes</a> (${track.asOf})</dd>
+      <dt>Credited people</dt><dd>9 people and 1 label</dd>
+      <dt>Split sheet</dt><dd>${latest ? "v" + latest.v + " · " + latest.hash.slice(0, 18) + "…" : "none public. Shares shown are examples."}</dd></dl>`;
+    return;
+  }
+  const h = holders.find(x => x.id === selected);
+  if (h) {
+    const label = h.right === "comp" ? "Composition (song and lyrics)" : "Master (the recording)";
+    const extra = h.star ? `<p class="note" style="margin-top:12px;color:var(--cream)">Stephanie sings on a video with over half a million views. Does she earn anything from it? A signed split sheet on Cloutiverse would answer that for every person on this map.</p>` : "";
+    d.innerHTML = `<div class="eyebrow">${h.role} · real credit</div><h2>${h.name}</h2>
+      <p class="sub"><span class="pill c-${h.right}">${label}</span></p>
+      <dl class="kv"><dt>Example share</dt><dd>${h.share}% of the ${h.right === "comp" ? "composition" : "master"}</dd>
+      <dt>Estimated earnings</dt><dd>${fmt(m.pay[h.id])}</dd><dt>Payout wallet</dt><dd>${h.wallet}</dd>
+      <dt>Signed</dt><dd>${latest ? "split sheet v" + latest.v : "waiting for signature"}</dd></dl>${extra}`;
+    return;
+  }
+  const s = sources.find(x => x.id === selected);
+  if (s) {
+    const rows = {
+      str:[["Where", "Apple Music, JioSaavn, others"], ["Volume", m.streams.toLocaleString("en-US") + " streams (example)"], ["Rate", "~US$0.003 per stream"], ["Gross", fmt(m.streams * .003 * LKR_PER_USD)], ["Goes to", "80% master · 20% composition"]],
+      yt:[["Where", "Sirasa TV official channel"], ["Volume", m.yt.toLocaleString("en-US") + " views"], ["Rate", "~US$0.0008 per view"], ["Gross", fmt(m.yt * .0008 * LKR_PER_USD)], ["Goes to", "80% master · 20% composition"]],
+      tv:[["Use", "Theme of The Voice Teens S2"], ["Fee", fmt(m.sync) + " (example)"], ["Goes to", "50% master · 50% composition"]],
+    }[s.id];
+    d.innerHTML = `<div class="eyebrow">Income source</div><h2>${s.name}</h2><p class="sub">${s.role}</p>
+      <dl class="kv">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;
+    return;
+  }
+  const dv = derivs.find(x => x.id === selected);
+  if (dv) {
+    d.innerHTML = `<div class="eyebrow">${dv.note ? "Built on this song" : "Licensed new work"} · ${dv.type}</div><h2>${dv.name}</h2><p class="sub">by ${dv.who}</p>
+      ${dv.note ? `<p class="note" style="color:var(--dim);font-size:13.5px;margin:0 0 12px">${dv.note}</p>` : ""}
+      <dl class="kv"><dt>Expected revenue</dt><dd>${dv.rev ? fmt(dv.rev) : "not tracked"}</dd><dt>Royalty back</dt><dd>${dv.pct}%${dv.rev ? " · " + fmt(dv.rev * dv.pct / 100) : ""}</dd>
+      <dt>Goes to</dt><dd>${dv.pct ? "every holder on " + track.title + ", by their share" : "nobody today"}</dd></dl>`;
+  }
+}
+
+/* ---------- splits ---------- */
+function drawSplits(){
+  [["comp", "#g-comp", "Composition"], ["master", "#g-master", "Master recording"]].forEach(([right, sel, title]) => {
+    const g = $(sel); const list = holders.filter(h => h.right === right);
+    const sum = list.reduce((s, h) => s + h.share, 0);
+    g.innerHTML = `<div class="group-head"><h3 class="c-${right}">${title}</h3><span class="sum ${sum === 100 ? "ok" : "bad"}" id="sum-${right}">${sum}% of 100%</span></div>` +
+      list.map(h => `<div class="row"><div class="who"><b>${h.name}</b><small>${h.role}</small></div>
+        <input type="range" min="0" max="100" value="${h.share}" id="sl-${h.id}" aria-label="${h.name} share">
+        <output id="o-${h.id}">${h.share}%</output></div>`).join("");
+    list.forEach(h => $("#sl-" + h.id).addEventListener("input", e => {
+      h.share = +e.target.value; $("#o-" + h.id).textContent = h.share + "%";
+      const s = list.reduce((a, x) => a + x.share, 0), el2 = $("#sum-" + right);
+      el2.textContent = s + "% of 100%"; el2.className = "sum " + (s === 100 ? "ok" : "bad");
+      checkSums(); render(); showDetail(); drawPay();
+    }));
+  });
+  checkSums();
+}
+function checkSums(){
+  const ok = ["comp", "master"].every(r => holders.filter(h => h.right === r).reduce((s, h) => s + h.share, 0) === 100);
+  const b = $("#register"); b.disabled = !ok;
+  b.textContent = ok ? (sheets.length ? "Sign & register v" + (sheets.length + 1) : "Sign & register split sheet") : "Each side must add up to 100%";
+}
+async function sha(text){
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return "0x" + [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) {
+    let h = 0; for (const ch of text) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    return "0x" + h.toString(16).padStart(8, "0").repeat(8);
+  }
+}
+$("#register").addEventListener("click", async () => {
+  const sheet = {track:track.title, label:track.label, version:sheets.length + 1,
+    composition:holders.filter(h => h.right === "comp").map(h => [h.name, h.role, h.share]),
+    master:holders.filter(h => h.right === "master").map(h => [h.name, h.role, h.share]),
+    signedAt:new Date().toISOString()};
+  const hash = await sha(JSON.stringify(sheet));
+  sheets.push({v:sheet.version, hash, at:sheet.signedAt, snapshot:holders.map(h => h.role + " " + h.share + "%").join(" · ")});
+  drawProofs(); checkSums(); showDetail();
+  holders.forEach((h, i) => setTimeout(() => pulse(paths[h.id], HEX[h.right]), i * 90));
+});
+function drawProofs(){
+  $("#proofs").innerHTML = sheets.slice().reverse().map((s, i) => `<div class="proof">
+    <div class="eyebrow" style="color:${i === 0 ? "var(--good)" : "var(--faint)"}">${i === 0 ? "Current split sheet" : "Replaced"} · v${s.v}</div>
+    <div class="hash">${s.hash}</div>
+    <div class="meta"><span>${holders.length}/${holders.length} signatures</span><span>${new Date(s.at).toLocaleString("en-GB", {dateStyle:"medium", timeStyle:"short"})}</span></div>
+    <div class="meta" style="font-family:var(--sans)">${s.snapshot}</div></div>`).join("");
+}
+
+/* ---------- earnings ---------- */
+function drawPay(){
+  const m = money(), max = Math.max(...Object.values(m.pay), 1);
+  $("#pay").innerHTML = `<thead><tr><th>Holder</th><th class="n">Share</th><th class="n">Earns</th></tr></thead><tbody>` +
+    holders.map(h => `<tr><td>${h.name} <span style="color:var(--faint);font-size:12px">${h.role}</span><div class="bar"><span style="width:${(m.pay[h.id] / max * 100).toFixed(1)}%;background:${COL[h.right]}"></span></div></td>
+      <td class="n c-${h.right}">${h.share}%</td><td class="n">${fmt(m.pay[h.id])}</td></tr>`).join("") + `</tbody>`;
+  $("#total").textContent = fmt(m.total);
+}
+["#in-streams", "#in-yt", "#in-tv"].forEach(s => $(s).addEventListener("input", () => { drawPay(); showDetail(); }));
+$("#run").addEventListener("click", runMoney);
+function runMoney(){
+  const m = money(), max = Math.max(...Object.values(m.pay), 1);
+  [...sources, ...derivs.filter(d => d.pct)].forEach((s, i) => setTimeout(() => { pulse(paths[s.id], HEX[s.kind]); setTimeout(() => pulse(paths[s.id], HEX[s.kind]), 220); }, i * 120));
+  setTimeout(() => holders.forEach(h => {
+    const n = 1 + Math.round(m.pay[h.id] / max * 3);
+    for (let k = 0; k < n; k++) setTimeout(() => pulse(paths[h.id], HEX[h.right]), k * 200);
+  }), 900);
+}
+
+/* ---------- pulses ---------- */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function pulse(path, color){
+  if (!path || reduce) return;
+  const len = path.getTotalLength(), dot = el("circle", {r:4.5, fill:color}, gPulse), t0 = performance.now(), dur = 850;
+  dot.style.filter = `drop-shadow(0 0 6px ${color})`;
+  (function step(t){
+    const k = Math.min(1, (t - t0) / dur), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+    const p = path.getPointAtLength(e * len); dot.setAttribute("cx", p.x); dot.setAttribute("cy", p.y);
+    dot.setAttribute("opacity", k > .9 ? (1 - k) * 10 : 1);
+    if (k < 1) requestAnimationFrame(step); else dot.remove();
+  })(t0);
+}
+
+/* ---------- licensing ---------- */
+function drawLics(){
+  $("#lics").innerHTML = derivs.map(d => `<div class="lic"><span><b style="font-weight:500">${d.name}</b> · ${d.who}</span>
+    <span class="c-der" style="font-family:var(--mono);font-size:12.5px">${d.pct ? d.pct + "% back" : "0% tracked"}</span>
+    <small>${d.note ? d.type + " · " + d.note : d.type + " · expected " + fmt(d.rev) + " · pays " + fmt(d.rev * d.pct / 100) + " to " + track.title}</small></div>`).join("");
+}
+$("#grant").addEventListener("click", () => {
+  if (derivs.length >= 5) { $("#grant").textContent = "Map is full in this demo"; $("#grant").disabled = true; return; }
+  const type = $("#lic-type").value, who = ($("#lic-who").value || "New licensee").trim();
+  const rev = Math.max(0, +$("#lic-rev").value || 0), pct = Math.min(90, Math.max(1, +$("#lic-pct").value || 1));
+  const id = "d" + (++licN) + Date.now();
+  const name = {Remix:"Remix", Sample:"Sample", Cover:"Cover", "Ad sync":"Ad sync"}[type] + " · " + who.split(" ")[0];
+  derivs.push({id, name, role:who + " · " + pct + "% back", kind:"der", type, who, rev, pct});
+  selected = id; render(id); showDetail(); drawLics(); drawPay();
+  setTimeout(() => { pulse(paths[id], HEX.der); setTimeout(() => holders.forEach(h => pulse(paths[h.id], HEX[h.right])), 800); }, 450);
+});
+
+/* ---------- tabs ---------- */
+document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
+  ["splits", "earn", "lic"].forEach(t => $("#p-" + t).hidden = t !== b.dataset.tab);
+}));
+
+render(); drawSplits(); drawPay(); drawLics(); showDetail();
+setTimeout(runMoney, 600);
+})();
+</script>
+
+</body>
+</html>
